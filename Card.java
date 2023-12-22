@@ -1,24 +1,39 @@
-public class Card{
+public class Card {
     private String color;
     private int num;
     private String sign;
 
-    public Card() {
-        this.color=color;
-        this.num=num;
-        this.sign=sign;
+    private static  int playerwin;
+    private static int compwin;
+
+
+    public int getPlayerwin() {
+        return playerwin;
     }
+    public void setPlayerwin() {
+        this.playerwin=playerwin++;
+    }
+
+    public int getCompwin() {
+        return compwin;
+    }
+    public void setCompwin(int compwin) {
+        this.compwin = compwin++;
+    }
+
+    public Card() {
+        this.color="";
+        this.num=0;
+        this.sign="";
+    }
+
 
     public Card(String color,int num, String sign) {
         this.color=color;
         this.num=num;
         this.sign=sign;
     }
-    public Card(String color,int num) {
-        this.color=color;
-        this.num=num;
 
-    }
     //------------------------------------SETANDGETCOLOR-----------------------------------
 
     public String getColor() {return color;}
