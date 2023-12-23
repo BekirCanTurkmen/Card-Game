@@ -22,7 +22,8 @@ public class Game {
 
     Scanner sc = new Scanner(System.in);
     public void Play() {
-
+        System.out.println("GAME IS STARTING");
+        System.out.println("-----------------------");
         //---------------------------------ShowingCardsToPlayerAndComp-------------------------------
         System.out.println("Your cards are: ");
         for (int i = 0; i < deck.getDeckplayerSeletcted().length ; i++) {
@@ -74,6 +75,8 @@ public class Game {
                 System.out.print((i+1) + ")"+"X ");
             }
         }
+
+
     }
 
     public void CardSelectPlayer() {
@@ -99,11 +102,18 @@ public class Game {
                         counter++;
                     }
                 } else if (selected >= 1 && selected <= 4) {
-                    // Seçilen kartın null olup olmadığını kontrol et
+                    while (selected >= 1 && selected <= 4) {
+                        if (playerboardcounter == 0 && deck.getDeckplayerSeletcted()[selected - 1].getColor()== null) {
+                            System.out.println("You can not play the special card as a first card");
+                            selected = sc.nextInt();
+                        } else {
+                            break;
+                        }
+                    }
+
                     if (deck.getDeckplayerSeletcted()[selected - 1] == null) {
                         System.out.println("Your choice is null, please choose again.");
                     } else {
-                        // Kartın özelliklerine göre işlem yap
                         if (deck.getDeckplayerSeletcted()[selected - 1].getSign().equals("x2")) {
                             boardplayer[playerboardcounter] = boardplayer[playerboardcounter - 1];
                             deck.getDeckplayerSeletcted()[selected - 1] = null;
@@ -120,20 +130,24 @@ public class Game {
                             deck.getDeckplayerSeletcted()[selected - 1] = null;
                             playerboardcounter++;
                         }
-                    }setPlayerhelp(5);
-                    if(compsum<16) {
-                        counter =0;
-                        for(int i=0;i<deck.getDeckcompSeletcted().length;i++) {
-                            if(deck.getDeckcompSeletcted()[i] != null) {
-                                if(compsum + deck.getDeckcompSeletcted()[i].getNum() == 20 || compsum + deck.getDeckcompSeletcted()[i].getNum() ==19) {
-                                    boardComp[compboardcounter] = deck.getDeckcompSeletcted()[i];
-                                    compsum += deck.getDeckcompSeletcted()[i].getNum();
-                                    compboardcounter++;
-                                    deck.getDeckcompSeletcted()[i] = null;
+                    }
 
-                                }
+                    setPlayerhelp(5);
+
+                    counter =0;
+                    for(int i=0;i<deck.getDeckcompSeletcted().length;i++) {
+                        if(deck.getDeckcompSeletcted()[i] != null) {
+                            if(compsum + deck.getDeckcompSeletcted()[i].getNum() >17) {
+                                boardComp[compboardcounter] = deck.getDeckcompSeletcted()[i];
+                                compsum += deck.getDeckcompSeletcted()[i].getNum();
+                                compboardcounter++;
+                                deck.getDeckcompSeletcted()[i] = null;
+
                             }
                         }
+                    }
+
+                    if(compsum<16) {
                         boolean x = true;
                         while(x==true) {
                             if(deck.getDeck()[counter] != null) {
@@ -151,19 +165,19 @@ public class Game {
                     }
                 } else if(selected == 5){
                     setPlayerhelp(5);
-                    if(compsum<16) {
-                        counter =0;
-                        for(int i=0;i<deck.getDeckcompSeletcted().length;i++) {
-                            if(deck.getDeckcompSeletcted()[i] != null) {
-                                if(compsum + deck.getDeckcompSeletcted()[i].getNum() == 20 || compsum + deck.getDeckcompSeletcted()[i].getNum() ==19) {
-                                    boardComp[compboardcounter] = deck.getDeckcompSeletcted()[i];
-                                    compsum += deck.getDeckcompSeletcted()[i].getNum();
-                                    compboardcounter++;
-                                    deck.getDeckcompSeletcted()[i] = null;
-
-                                }
+                    counter =0;
+                    for(int i=0;i<deck.getDeckcompSeletcted().length;i++) {
+                        if(deck.getDeckcompSeletcted()[i] != null) {
+                            if(compsum + deck.getDeckcompSeletcted()[i].getNum() >10) {
+                                boardComp[compboardcounter] = deck.getDeckcompSeletcted()[i];
+                                compsum += deck.getDeckcompSeletcted()[i].getNum();
+                                compboardcounter++;
+                                deck.getDeckcompSeletcted()[i] = null;
                             }
                         }
+                    }
+                    if(compsum<16) {
+
                         boolean x = true;
                         while(x==true) {
                             if(deck.getDeck()[counter] != null) {
@@ -179,6 +193,7 @@ public class Game {
                         }
 
                     }
+
 
 
                     System.out.println();
@@ -206,11 +221,6 @@ public class Game {
         } while (selected < 0 || selected > 5); // Doğru giriş yapana kadar döngüyü devam ettir
 
 
-        for (int i = 0;i<boardplayer.length;i++) {
-            if(boardplayer[i] != null) {
-                playersum+= boardplayer[i].getNum();
-            }
-        }
         System.out.println("---------------------------");
         System.out.println("Player Board");
 
@@ -257,19 +267,19 @@ public class Game {
 
 
     public void CardSelectComp() {
-        //BILGISAYAR ATMAMASI GEREKEN YERDE KART ATIYO KONTROL ET
-        if(compsum<16) {
-            counter =0;
-            for(int i=0;i<deck.getDeckcompSeletcted().length;i++) {
-                if(deck.getDeckcompSeletcted()[i] != null) {
-                    if(compsum + deck.getDeckcompSeletcted()[i].getNum() == 20 || compsum + deck.getDeckcompSeletcted()[i].getNum() ==19) {
-                        boardComp[compboardcounter] = deck.getDeckcompSeletcted()[i];
-                        compsum += deck.getDeckcompSeletcted()[i].getNum();
-                        compboardcounter++;
-                        deck.getDeckcompSeletcted()[i] = null;
-                    }
+        counter =0;
+        for(int i=0;i<deck.getDeckcompSeletcted().length;i++) {
+            if(deck.getDeckcompSeletcted()[i] != null) {
+                if(compsum + deck.getDeckcompSeletcted()[i].getNum() >17) {
+                    boardComp[compboardcounter] = deck.getDeckcompSeletcted()[i];
+                    compsum += deck.getDeckcompSeletcted()[i].getNum();
+                    compboardcounter++;
+                    deck.getDeckcompSeletcted()[i] = null;
                 }
             }
+        }
+
+        if(compsum<16) {
             boolean x = true;
             while(x==true) {
                 if(deck.getDeck()[counter] != null) {
@@ -301,6 +311,18 @@ public class Game {
 
     public void EndGame() {
 
+
+
+        for (int i = 0;i<boardplayer.length;i++) {
+            if(boardplayer[i] != null) {
+                if(boardplayer[i].getSign() == "+") {
+                    playersum+= boardplayer[i].getNum();
+                } else {
+                    playersum-= boardplayer[i].getNum();
+                }
+            }
+        }
+
         System.out.println();
         System.out.println("***************************");
         System.out.println("Computer Board");
@@ -313,7 +335,7 @@ public class Game {
                 System.out.print(boardComp[i].getColor() + boardComp[i].getNum() + boardComp[i].getSign()+" ");
             }
         }
-
+        System.out.println();
         System.out.println("Computer cards are: ");
 
         for (int i = 0; i < deck.getDeckcompSeletcted().length ; i++) {
@@ -323,48 +345,69 @@ public class Game {
                 System.out.print((i+1) + ")"+"X ");
             }
         }
-        //---------------------------------------------------------------------------------
+        //-------------------------------------------------------------------W--------------
+        System.out.println();
+        System.out.println("----------------------------");
         if(playersum == compsum) {
-
+            win.setCompwin(win.getCompwin()+1);
+            win.setPlayerwin(win.getPlayerwin()+1);
             System.out.println("IT IS DRAW");
             System.out.println(compsum);
             System.out.println(playersum);
-            win.setPlayerwin();
-            win.setCompwin(1);
         } else if(playersum > compsum && playersum < 21) {
-            System.out.println("Score is-> " + "Player: " + playersum + "Comp: " + compsum);
-            System.out.println(win.getCompwin());
-            System.out.println(win.getPlayerwin());
-            win.setPlayerwin();
+            int bluecounter=0;
+            int nullcounter =0;
+            if(compsum == 20) {
+                for(int i=0;i<boardplayer.length;i++) {
+                    if (boardplayer[i] != null ) {
+                        if(boardplayer[i].getColor().equals("B")){
+                            bluecounter++;
+                        }
+                    } else {
+                        nullcounter++;
+                    }
+                }
+                if(bluecounter == boardplayer.length-nullcounter) win.setPlayerwin(3);
+            } else{
+                win.setPlayerwin(win.getPlayerwin()+1);
+            }
 
-
+            System.out.println("Summation is-> " + "Player: " + playersum + " Comp: " + compsum);
         } else if(compsum > playersum && compsum < 21) {
+            int bluecounter=0;
+            int nullcounter =0;
+            if(compsum == 20) {
+                for(int i=0;i<boardComp.length;i++) {
+                    if (boardComp[i] != null ) {
+                        if(boardComp[i].getColor().equals("B")){
+                            bluecounter++;
+                        }
+                    } else {
+                        nullcounter++;
+                    }
+                }
+                if(bluecounter == boardComp.length-nullcounter) win.setCompwin(3);
+                win.setCompwin(win.getCompwin()+1);
+            } else{
+                win.setCompwin(win.getCompwin()+1);
+            }
 
-            System.out.println("Score is-> " + "Player: " + playersum + "Comp: " + compsum);
-            System.out.println(win.getCompwin());
-            System.out.println(win.getPlayerwin());
-            win.setCompwin(win.getCompwin() + 1);
-
+            System.out.println("Summation is-> " + "Player: " + playersum + " Comp: " + compsum);
+        } else if(compsum>20) {
+            win.setPlayerwin(win.getPlayerwin()+1);
+            System.out.println("Summation is-> " + "Player: " + playersum + " Comp: " + compsum);
+        } else if(playersum>20) {
+            win.setCompwin(win.getCompwin()+1);
+            System.out.println("Summation is-> " + "Player: " + playersum + " Comp: " + compsum);
         }
-        else if(playersum>20){
-            win.setCompwin(win.getCompwin() + 1);
-            System.out.println(win.getCompwin());
-            System.out.println(win.getPlayerwin());
+        System.out.println("Player Win Total: " + win.getPlayerwin());
+        System.out.println("Computer Win Total: " +win.getCompwin());
 
-            System.out.println("Score is-> " + "Player: " + playersum + "Comp: " + compsum);
-            System.out.println("--WİN COMPUTER--");
-        }
-        else if(compsum>20){
-            System.out.println("Score is-> " + "Player: " + playersum + "Comp: " + compsum);
-            System.out.println("--WİN PLAYER--");
-            System.out.println(win.getCompwin());
-            System.out.println(win.getPlayerwin());
-            win.setPlayerwin ();
 
-        }
-        System.out.println("NEW GAME IS STARTING");
     }
     public void Clear()  {
+
+
         playersum =0;
         compsum=0;
         counter =0;
@@ -386,4 +429,5 @@ public class Game {
             }
         }
     }
+
 }
