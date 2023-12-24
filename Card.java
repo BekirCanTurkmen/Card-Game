@@ -3,22 +3,20 @@ public class Card {
     private int num;
     private String sign;
 
-    private static  int playerwin;
+    private static int playerwin;
     private static int compwin;
-
-
     public int getPlayerwin() {
         return playerwin;
     }
-    public void setPlayerwin() {
-        this.playerwin=playerwin++;
+    public void setPlayerwin(int playerwin) {
+        this.playerwin = playerwin;
     }
 
     public int getCompwin() {
         return compwin;
     }
     public void setCompwin(int compwin) {
-        this.compwin = compwin++;
+        this.compwin = compwin;
     }
 
     public Card() {

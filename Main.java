@@ -1,23 +1,33 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
+
 public class Main {
     private static final int MAX_GAMES = 10;
     private static final String FILENAME = "game_history.txt";
+
+    private static String[] history;
+    private static int gamesCounter;
 
     public static void main(String[] args) {
         Deck deck = new Deck();
         deck.CreateDeck();
         Game game = new Game();
-        Card card=new Card();
+        Card card= new Card();
+
+        history = new String[MAX_GAMES];
+        gamesCounter = 0;
 
         Scanner input = new Scanner(System.in);
         System.out.print("Oyuncu ismini girin: ");
         String playerName = input.nextLine();
 
+        loadGameHistory(); // Oyun geçmişini yükle
 
         while(true) {
 
@@ -47,26 +57,57 @@ public class Main {
         gameFinished(playerName, card.getPlayerwin(), card.getCompwin());
 
 
-        printGameHistory();
     }
 
     private static void gameFinished(String playerName, int playerScore, int computerScore) {
         LocalDate date = LocalDate.now();
-        String gameResult = String.format("%s:%d - Bilgisayar:%d, %s", playerName, playerScore, computerScore, date);
+        String gameResult = String.format("%s:%d - Computer:%d, %s", playerName, playerScore, computerScore, date);
 
-        saveHistoryToFile(gameResult);
+        if (gamesCounter < MAX_GAMES) {
+            history[gamesCounter] = gameResult;
+            gamesCounter++;
+        } else {
+            shiftAndAdd(gameResult);
+        }
+
+        saveHistoryToFile();
     }
 
-    private static void saveHistoryToFile(String newGame) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME, true))) {
-            writer.write(newGame);
-            writer.newLine();
+    private static void shiftAndAdd(String newGame) {
+        for (int i = MAX_GAMES - 1; i > 0; i--) {
+            history[i] = history[i - 1];
+        }
+        history[0] = newGame;
+
+    }
+
+    private static void saveHistoryToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME))) {
+            for (int i = 0; i < gamesCounter; i++) {
+                writer.write(history[i]);
+                writer.newLine();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void printGameHistory() {
-        // Geçmişi oku ve yazdır
+    private static void loadGameHistory() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILENAME))) {
+            
+            
+            
+            String line;
+            int i = 0;
+            while ((line = reader.readLine()) != null && i < MAX_GAMES) {
+                history[i] = line;
+                i++;
+                gamesCounter++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+
 }

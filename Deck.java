@@ -248,6 +248,7 @@ public class Deck {
         setDeckcompSeletcted(deckcompSeletcted);
 
 
+
     }
     public void Shuffle () {
 
